@@ -13,7 +13,7 @@ def parse_as_tw_timestamp(inp):
 
     return eastern.localize(naive_dt, is_dst=None).strftime("%Y%m%d%H%M%S%f")[:-3]
 
-if __name__ == "__main__":
+def main():
     print("TW date conversion active")
 
     try:
@@ -29,3 +29,6 @@ if __name__ == "__main__":
         pass
 
     print("TW date conversion disabled")
+
+if __name__ == "__main__":
+    main()
