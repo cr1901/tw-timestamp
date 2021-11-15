@@ -6,20 +6,30 @@ import pyperclip
 import pytz
 import sys
 
+
 def parse_as_tw_timestamp(inp, tz, dst):
     try:
         naive_dt = dateutil.parser.parse(inp)
     # Large ints will be parsed as Unix time and Overflow, ignore them.
-    except (dateutil.parser._parser.ParserError, OverflowError) as e:
+    except (dateutil.parser._parser.ParserError, OverflowError):
         return inp
 
-    return tz.localize(naive_dt, is_dst=None).astimezone(pytz.utc).strftime("%Y%m%d%H%M%S%f")[:-3]
+    return (tz.localize(naive_dt, is_dst=None).astimezone(pytz.utc)
+              .strftime("%Y%m%d%H%M%S%f")[:-3])
+
 
 def main():
-    parser = argparse.ArgumentParser(description="Clipboard hook for converting dates to TiddlyWiki format.")
-    parser.add_argument("-t", "--time-zone", type=str, help="Local Time Zone assumed for copied dates.")
-    parser.add_argument("-d", "--dst", choices=["True", "False", "None"], help="Assume DST, no DST, or guess by default (and error if ambiguous).", default="None")
-    parser.add_argument("--dump", action="store_true", help="Dump list of valid Time Zones and exit.")
+    parser = argparse.ArgumentParser(
+        description="Clipboard hook for converting dates to TiddlyWiki"
+        "format.")
+    parser.add_argument("-t", "--time-zone", type=str,
+                        help="Local Time Zone assumed for copied dates.")
+    parser.add_argument("-d", "--dst", choices=["True", "False", "None"],
+                        help="Assume DST, no DST, or guess by default"
+                             " (and error if ambiguous).",
+                        default="None")
+    parser.add_argument("--dump", action="store_true",
+                        help="Dump list of valid Time Zones and exit.")
     args = parser.parse_args()
 
     if args.dump:
@@ -56,6 +66,7 @@ def main():
         pass
 
     print("TW date conversion disabled")
+
 
 if __name__ == "__main__":
     main()
