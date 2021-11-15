@@ -9,7 +9,8 @@ import sys
 def parse_as_tw_timestamp(inp, tz, dst):
     try:
         naive_dt = dateutil.parser.parse(inp)
-    except dateutil.parser._parser.ParserError as e:
+    # Large ints will be parsed as Unix time and Overflow, ignore them.
+    except (dateutil.parser._parser.ParserError, OverflowError) as e:
         return inp
 
     return tz.localize(naive_dt, is_dst=None).astimezone(pytz.utc).strftime("%Y%m%d%H%M%S%f")[:-3]
@@ -43,6 +44,7 @@ def main():
 
     try:
         while True:
+            # Will not run twice for the same exact copied input.
             inp = pyperclip.waitForNewPaste()
             tw_time_or_inp = parse_as_tw_timestamp(inp, tz, dst)
             if inp != tw_time_or_inp:
