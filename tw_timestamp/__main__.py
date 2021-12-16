@@ -14,7 +14,7 @@ def parse_as_tw_timestamp(inp, tz, dst):
     except (dateutil.parser._parser.ParserError, OverflowError):
         return inp
 
-    return (tz.localize(naive_dt, is_dst=None).astimezone(pytz.utc)
+    return (tz.localize(naive_dt, is_dst=dst).astimezone(pytz.utc)
               .strftime("%Y%m%d%H%M%S%f")[:-3])
 
 
