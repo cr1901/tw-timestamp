@@ -5,6 +5,7 @@ import dateutil.parser
 import pyperclip
 import pytz
 import sys
+import tzlocal
 
 
 def parse_as_tw_timestamp(inp, tz, dst):
@@ -46,9 +47,9 @@ def main():
         dst = False
 
     if not args.time_zone:
-        print("Time Zone must be provided. Use --dump option for list.")
-        sys.exit(-1)
-    tz = pytz.timezone(args.time_zone)
+        tz = tzlocal.get_localzone()
+    else:
+        tz = pytz.timezone(args.time_zone)
 
     print("TW date conversion active")
 
